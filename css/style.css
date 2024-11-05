@@ -33,7 +33,15 @@ body {
    border-radius: 5px;
    margin-bottom: 10px;
  }
- 
+ #sort-by {
+   padding: 5px;
+   background-color: #036106;
+   color: #fff;
+   border: none;
+   border-radius: 5px;
+   cursor: pointer;
+   
+ }
  #add-task-button {
    padding: 10px 20px;
    background-color: #4caf50;
@@ -77,8 +85,7 @@ body {
  
  .remove-task-button,
  .edit-task-button {
-   background-color: #f44336;
-   color: #fff;
+   color: #556b90;
    border: none;
    border-radius: 5px;
    padding: 5px 10px;
@@ -87,7 +94,7 @@ body {
  }
  
  .edit-task-button {
-   background-color: #2196f3;
+   color: #45a049;
  }
  
  .remove-task-button:hover,
