@@ -9,6 +9,16 @@ let editTodo = null;
 
 function getTodos() {
   toDos = JSON.parse(localStorage.getItem("toDos"));
+  toDos.sort(function (a, b) {
+    if (a.value < b.value) {
+      return -1;
+    }
+    if (a.value > b.value) {
+      return 1;
+    }
+    return 0;
+  });
+  saveTodosInLocalStorage();
   createTodos();
 }
 
@@ -29,16 +39,17 @@ function addTask() {
     addTaskButton.value = "Add";
     inputText.value = "";
     inputTitle.value = "";
+    saveTodosInLocalStorage(taskText);
   } else {
     let toDo = {
       title: inputTitle.value,
       text: inputText.value,
+      value: sortSelect.value,
     };
     toDos.push(toDo);
     createTodos();
     inputTitle.value = "";
     inputText.value = "";
-    saveTodosInLocalStorage(taskText);
   }
 }
 function updateTodo(e) {
@@ -71,7 +82,8 @@ function createTodos() {
     let p = document.createElement("p");
     p.innerHTML = toDos[i].text;
     div.appendChild(p);
-
+    saveTodosInLocalStorage();
+    
     let editTaskButton = document.createElement("button");
     editTaskButton.classList.add("edit-task-button");
     editTaskButton.innerHTML = "Edit";
@@ -99,6 +111,7 @@ function editTodos(todo) {
   toDos[todoIndex] = inputText.value;
   saveTodosInLocalStorage();
 }
+
 document.addEventListener("DOMContentLoaded", getTodos);
 addTaskButton.addEventListener("click", addTask);
 listContainer.addEventListener("click", updateTodo);
