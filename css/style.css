@@ -34,6 +34,17 @@ body {
    margin-bottom: 10px;
  }
  #sort-by {
+  display: flex;
+  justify-self: right;
+  padding: 5px;
+  background-color: #6c8967;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+ #priority {
    padding: 5px;
    background-color: #036106;
    color: #fff;
@@ -42,7 +53,7 @@ body {
    cursor: pointer;
    
  }
- #add-task-button {
+ #add-todos-button {
    padding: 10px 20px;
    background-color: #4caf50;
    color: #fff;
@@ -52,7 +63,7 @@ body {
    margin-bottom: 20px;
  }
  
- #add-task-button:hover {
+ #add-todos-button:hover {
    background-color: #45a049;
  }
  
@@ -83,8 +94,8 @@ body {
    flex-grow: 2;
  }
  
- .remove-task-button,
- .edit-task-button {
+ .remove-todos-button,
+ .edit-todos-button {
    color: #556b90;
    border: none;
    border-radius: 5px;
@@ -93,12 +104,12 @@ body {
    margin-left: 10px;
  }
  
- .edit-task-button {
+ .edit-todos-button {
    color: #45a049;
  }
  
- .remove-task-button:hover,
- .edit-task-button:hover {
+ .remove-todos-button:hover,
+ .edit-todos-button:hover {
    opacity: 0.8;
  }
  

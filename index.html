@@ -9,17 +9,23 @@
 <body>
    <div class="todo__wrapper">
       <h2>Create your Todo-List</h2>
-      <div id="todo__input">
-         <input index="2" id="input-title" type="text" placeholder="Add your Title">
-         <textarea index="1" id="input-text" name="input-text"  cols="30" rows="5" placeholder="Add your Task"></textarea>
-      </div>
       <select name="sort-by" id="sort-by">
-         <option>Sort By</option>
+         <option>Sort-by</option>
          <option value="1">high</option>
          <option value="2">medium</option>
          <option value="3">low</option>
       </select>
-      <button id="add-task-button">Add</button>
+      <div id="todo__input">
+         <input index="2" id="input-title" type="text" placeholder="Add your Title">
+         <textarea index="1" id="input-text" name="input-text"  cols="30" rows="5" placeholder="Add your Task"></textarea>
+      </div>
+      <select name="priority" id="priority">
+         <option>Priority</option>
+         <option value="1">high</option>
+         <option value="2">medium</option>
+         <option value="3">low</option>
+      </select>
+      <button class="add-todos-button" id="add-todos-button">Add</button>
       <div id="list-container"></div>
    </div>
    <script src="js/script.js"></script>
