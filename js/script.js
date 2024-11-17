@@ -105,7 +105,15 @@ function displayTodos() {
     div.appendChild(isCheckedTodo);
 
     let priorityValue = document.createElement("span");
-    priorityValue.innerHTML = toDos[i].priority;
+    if (toDos[i].priority === "1") {
+      priorityValue.innerHTML = "high";
+    } else if (toDos[i].priority === "2") {
+      priorityValue.innerHTML = "medium";
+    } else if (toDos[i].priority === "3") {
+      priorityValue.innerHTML = "low";
+    } else {
+      priorityValue.innerHTML = "";
+    }
     div.appendChild(priorityValue);
 
     let h4 = document.createElement("h4");
