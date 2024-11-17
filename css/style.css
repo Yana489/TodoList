@@ -1,115 +1,155 @@
 body {
-   font-family: Arial, sans-serif;
-   margin: 0;
-   padding: 0;
-   background-color: #f4f4f4;
- }
- 
- .todo__wrapper {
-   width: 80%;
-   max-width: 600px;
-   margin: 50px auto;
-   background-color: #fff;
-   border-radius: 5px;
-   box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
-   padding: 20px;
- }
- 
- h2 {
-   text-align: center;
-   margin-bottom: 20px;
- }
- 
- #todo__input {
-   display: flex;
-   flex-direction: column;
-   margin-bottom: 20px;
- }
- 
- #input-title,
- #input-text {
-   padding: 10px;
-   border: 1px solid #ccc;
-   border-radius: 5px;
-   margin-bottom: 10px;
- }
- #sort-by {
+  font-family: "Times New Roman", Times, serif;
+  margin: 0;
+  padding: 0;
+  background-color: var(--tertiary-color);
+}
+
+.todos__wrapper {
+  width: 80%;
+  max-width: 700px;
+  margin: 50px auto;
+  background-color: var(--primary-color);
+  border-radius: 5px;
+  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+}
+
+input[type="checkbox"] {
+  accent-color: #535255;
+}
+
+:root {
+  --primary-color: #eaeef4;
+  --secondary-color: #171717;
+  --tertiary-color: rgb(250, 248, 248);
+}
+
+.dark-theme {
+  --primary-color: #040a22;
+  --secondary-color: #fff;
+  --tertiary-color: rgb(3, 3, 3);
+}
+#icon {
+  width: 25px;
+  cursor: pointer;
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: var(--secondary-color);
+}
+
+.todo-wrapper {
+  text-decoration: line-through;
+  text-decoration-color: #040a22;
+  background-color: var(--primary-color);
+}
+
+span {
+  margin-right: 20px;
+}
+
+#todo__input {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+  color: var(--primary-color);
+}
+
+#input-title,
+#input-text {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  resize: none;
+}
+#sort-by {
   display: flex;
   justify-self: right;
-  padding: 5px;
-  background-color: #6c8967;
-  color: #fff;
+  padding: 4px 8px;
+  background-color: var(--secondary-color);
+  color: var(--primary-color);
   border: none;
   border-radius: 5px;
   cursor: pointer;
   margin-bottom: 10px;
 }
- #priority {
-   padding: 5px;
-   background-color: #036106;
-   color: #fff;
-   border: none;
-   border-radius: 5px;
-   cursor: pointer;
-   
- }
- #add-todos-button {
-   padding: 10px 20px;
-   background-color: #4caf50;
-   color: #fff;
-   border: none;
-   border-radius: 5px;
-   cursor: pointer;
-   margin-bottom: 20px;
- }
- 
- #add-todos-button:hover {
-   background-color: #45a049;
- }
- 
- #list-container {
-   display: flex;
-   flex-direction: column;
- }
- 
- #list-container div {
-   display: flex;
-   justify-content: space-between;
-   align-items: center;
-   padding: 10px;
-   border-bottom: 1px solid #ccc;
- }
- 
- #list-container div:last-child {
-   border-bottom: none;
- }
- 
- #list-container h4 {
-   margin: 0;
-   flex-grow: 1;
- }
- 
- #list-container p {
-   margin: 0;
-   flex-grow: 2;
- }
- 
- .remove-todos-button,
- .edit-todos-button {
-   color: #556b90;
-   border: none;
-   border-radius: 5px;
-   padding: 5px 10px;
-   cursor: pointer;
-   margin-left: 10px;
- }
- 
- .edit-todos-button {
-   color: #45a049;
- }
- 
- .remove-todos-button:hover,
- .edit-todos-button:hover {
-   opacity: 0.8;
- }
- 
+
+#priority {
+  padding: 5px;
+  background-color: var(--secondary-color);
+  color: var(--primary-color);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+#save-todos-button,
+#add-todos-button {
+  padding: 6px 28px;
+  background-color: var(--secondary-color);
+  color: var(--primary-color);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-bottom: 20px;
+}
+
+#save-todos-button {
+  position: absolute;
+  margin-left: -80px;
+  display: none;
+}
+
+#list-container {
+  display: flex;
+  flex-direction: column;
+  color: var(--secondary-color);
+}
+
+#list-container div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+}
+
+#list-container div:last-child {
+  border-bottom: none;
+}
+
+#list-container h4 {
+  margin: 0;
+  flex-grow: 1;
+}
+
+#list-container p {
+  margin: 0;
+  flex-grow: 2;
+}
+
+.remove-todos-button,
+.edit-todos-button {
+  background-color: var(--secondary-color);
+  color: var(--primary-color);
+  border: none;
+  border-radius: 5px;
+  padding: 5px;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+.edit-todos-button {
+  padding: 5px 20px;
+}
+
+#sort-by:hover,
+#add-todos-button:hover,
+#priority:hover,
+.remove-todos-button:hover,
+.edit-todos-button:hover {
+  opacity: 0.7;
+}
