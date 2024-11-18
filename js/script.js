@@ -5,28 +5,43 @@ const addTodosButton = document.getElementById("add-todos-button");
 const saveEditTodosButton = document.getElementById("save-todos-button");
 const prioritySelect = document.getElementById("priority");
 const sortBySelect = document.getElementById("sort-by");
-let icon = document.getElementById("icon");
+let modeIcon = document.getElementById("icon");
 
-document.addEventListener("DOMContentLoaded", getTodos);
+document.addEventListener("DOMContentLoaded", getTodosFromLocalStorage);
 addTodosButton.addEventListener("click", addTodos);
 listContainer.addEventListener("click", clickOnButtons);
 sortBySelect.addEventListener("change", sortSelect);
-icon.addEventListener("click", clickOnIcon);
+modeIcon.addEventListener("click", clickOnDarkModeIcon);
 
 let toDos = [];
 
-function getTodos() {
+function getTodosFromLocalStorage() {
   toDos = JSON.parse(localStorage.getItem("toDos")) || [];
   sortSelect();
   displayTodos();
 }
 
-function clickOnIcon() {
+function saveTodosInLocalStorage() {
+  localStorage.setItem("toDos", JSON.stringify(toDos));
+}
+
+let currentTheme = localStorage.getItem("theme");
+
+if (currentTheme === "dark") {
+  document.body.classList.add("dark-theme");
+  modeIcon.src = "images/icons/sun.png";
+}
+
+function clickOnDarkModeIcon() {
   document.body.classList.toggle("dark-theme");
+  let theme = "light";
   if (document.body.classList.contains("dark-theme")) {
-    icon.src = "images/icons/sun.png";
+    theme = "dark";
+    modeIcon.src = "images/icons/sun.png";
+    localStorage.setItem("theme", theme);
   } else {
-    icon.src = "images/icons/moon.png";
+    modeIcon.src = "images/icons/moon.png";
+    localStorage.setItem("theme", theme);
   }
 }
 
@@ -81,16 +96,13 @@ function clickOnButtons(e) {
         todo.text = inputText.value;
         inputTitle.value = "";
         inputText.value = "";
+
         saveEditTodosButton.style.display = "none";
         saveTodosInLocalStorage();
         displayTodos();
       }
     });
   }
-}
-
-function saveTodosInLocalStorage() {
-  localStorage.setItem("toDos", JSON.stringify(toDos));
 }
 
 function displayTodos() {

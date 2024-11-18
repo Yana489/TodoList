@@ -1,5 +1,7 @@
+@import url(https://fonts.googleapis.com/css?family=Delius:regular);
 body {
-  font-family: "Times New Roman", Times, serif;
+  font-family: "Delius";
+  font-size: larger;
   margin: 0;
   padding: 0;
   background-color: var(--tertiary-color);
@@ -16,12 +18,12 @@ body {
 }
 
 input[type="checkbox"] {
-  accent-color: #535255;
+  accent-color: #474c6f;
 }
 
 :root {
   --primary-color: #eaeef4;
-  --secondary-color: #171717;
+  --secondary-color: #375d75;
   --tertiary-color: rgb(250, 248, 248);
 }
 
@@ -30,6 +32,7 @@ input[type="checkbox"] {
   --secondary-color: #fff;
   --tertiary-color: rgb(3, 3, 3);
 }
+
 #icon {
   width: 25px;
   cursor: pointer;
@@ -48,7 +51,8 @@ h2 {
 }
 
 span {
-  margin-right: 20px;
+  margin-right: 10px;
+  flex-grow: 1;
 }
 
 #todo__input {
@@ -60,6 +64,7 @@ span {
 
 #input-title,
 #input-text {
+  font-family: "Delius";
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 5px;
@@ -71,6 +76,7 @@ span {
   justify-self: right;
   padding: 4px 8px;
   background-color: var(--secondary-color);
+  font-family: "Delius";
   color: var(--primary-color);
   border: none;
   border-radius: 5px;
@@ -81,15 +87,18 @@ span {
 #priority {
   padding: 5px;
   background-color: var(--secondary-color);
+  font-family: "Delius";
   color: var(--primary-color);
   border: none;
   border-radius: 5px;
   cursor: pointer;
 }
+
 #save-todos-button,
 #add-todos-button {
   padding: 6px 28px;
   background-color: var(--secondary-color);
+  font-family: "Delius";
   color: var(--primary-color);
   border: none;
   border-radius: 5px;
@@ -123,7 +132,7 @@ span {
 
 #list-container h4 {
   margin: 0;
-  flex-grow: 1;
+  flex-grow: 2;
 }
 
 #list-container p {
@@ -134,6 +143,7 @@ span {
 .remove-todos-button,
 .edit-todos-button {
   background-color: var(--secondary-color);
+  font-family: "Delius";
   color: var(--primary-color);
   border: none;
   border-radius: 5px;
