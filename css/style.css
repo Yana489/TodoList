@@ -51,8 +51,8 @@ h2 {
 }
 
 span {
-  margin-right: 10px;
-  flex-grow: 1;
+  margin-left: 5px;
+  width: 90px;
 }
 
 #todo__input {
@@ -74,7 +74,7 @@ span {
 #sort-by {
   display: flex;
   justify-self: right;
-  padding: 4px 8px;
+  padding: 4px 6px;
   background-color: var(--secondary-color);
   font-family: "Delius";
   color: var(--primary-color);
@@ -85,7 +85,7 @@ span {
 }
 
 #priority {
-  padding: 5px;
+  padding: 5px 4px;
   background-color: var(--secondary-color);
   font-family: "Delius";
   color: var(--primary-color);
@@ -96,7 +96,7 @@ span {
 
 #save-todos-button,
 #add-todos-button {
-  padding: 6px 28px;
+  padding: 6px 27px;
   background-color: var(--secondary-color);
   font-family: "Delius";
   color: var(--primary-color);
@@ -120,7 +120,8 @@ span {
 
 #list-container div {
   display: flex;
-  justify-content: space-between;
+
+  word-wrap: break-word;
   align-items: center;
   padding: 10px;
   border-bottom: 1px solid #ccc;
@@ -132,12 +133,13 @@ span {
 
 #list-container h4 {
   margin: 0;
-  flex-grow: 2;
+  width: 200px;
+  margin-right: 10px;
 }
 
 #list-container p {
   margin: 0;
-  flex-grow: 2;
+  width: 220px;
 }
 
 .remove-todos-button,

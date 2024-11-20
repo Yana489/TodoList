@@ -11,7 +11,9 @@ document.addEventListener("DOMContentLoaded", getTodosFromLocalStorage);
 addTodosButton.addEventListener("click", addTodos);
 listContainer.addEventListener("click", clickOnButtons);
 sortBySelect.addEventListener("change", sortSelect);
-modeIcon.addEventListener("click", clickOnDarkModeIcon);
+modeIcon.addEventListener("click", clickOnChangeModeIcon);
+document.addEventListener("keydown", clickOnEnterButton);
+changeTheme();
 
 let toDos = [];
 
@@ -25,14 +27,16 @@ function saveTodosInLocalStorage() {
   localStorage.setItem("toDos", JSON.stringify(toDos));
 }
 
-let currentTheme = localStorage.getItem("theme");
+function changeTheme() {
+  let currentTheme = localStorage.getItem("theme");
 
-if (currentTheme === "dark") {
-  document.body.classList.add("dark-theme");
-  modeIcon.src = "images/icons/sun.png";
+  if (currentTheme === "dark") {
+    document.body.classList.add("dark-theme");
+    modeIcon.src = "images/icons/sun.png";
+  }
 }
 
-function clickOnDarkModeIcon() {
+function clickOnChangeModeIcon() {
   document.body.classList.toggle("dark-theme");
   let theme = "light";
   if (document.body.classList.contains("dark-theme")) {
@@ -45,7 +49,7 @@ function clickOnDarkModeIcon() {
   }
 }
 
-document.addEventListener("keydown", (e) => {
+function clickOnEnterButton(e) {
   if (e.key === "Enter") {
     e.preventDefault();
     if (saveEditTodosButton.style.display === "inline") {
@@ -54,7 +58,7 @@ document.addEventListener("keydown", (e) => {
       addTodosButton.click();
     }
   }
-});
+}
 
 function addTodos() {
   if (inputTitle.value === "" && inputText.value === "") {
@@ -70,6 +74,7 @@ function addTodos() {
     displayTodos();
     inputTitle.value = "";
     inputText.value = "";
+    prioritySelect.value = "Priority";
   }
 }
 
@@ -90,18 +95,18 @@ function clickOnButtons(e) {
     inputText.value = todo.text;
     saveEditTodosButton.style.display = "inline";
 
-    document.addEventListener("click", function (e) {
-      if (e.target.id === "save-todos-button") {
-        todo.title = inputTitle.value;
-        todo.text = inputText.value;
-        inputTitle.value = "";
-        inputText.value = "";
+    saveEditTodosButton.addEventListener("click", saveTodos);
 
-        saveEditTodosButton.style.display = "none";
-        saveTodosInLocalStorage();
-        displayTodos();
-      }
-    });
+    function saveTodos() {
+      todo.title = inputTitle.value;
+      todo.text = inputText.value;
+      inputTitle.value = "";
+      inputText.value = "";
+      saveEditTodosButton.style.display = "none";
+      saveTodosInLocalStorage();
+      displayTodos();
+      saveEditTodosButton.removeEventListener("click", saveTodos);
+    }
   }
 }
 
@@ -111,21 +116,25 @@ function displayTodos() {
   for (let i = 0; i < toDos.length; i++) {
     let div = document.createElement("div");
 
-    let isCheckedTodo = document.createElement("input");
-    isCheckedTodo.setAttribute("type", "checkbox");
-    isCheckedTodo.setAttribute("data-id", i);
-    div.appendChild(isCheckedTodo);
+    let checkboxTodo = document.createElement("input");
+    checkboxTodo.setAttribute("type", "checkbox");
+    checkboxTodo.setAttribute("data-id", i);
+
+    if (toDos[i].isChecked) {
+      checkboxTodo.setAttribute("checked", "checked");
+      div.classList.add("todo-wrapper");
+    }
+
+    div.appendChild(checkboxTodo);
 
     let priorityValue = document.createElement("span");
-    if (toDos[i].priority === "1") {
-      priorityValue.innerHTML = "high";
-    } else if (toDos[i].priority === "2") {
-      priorityValue.innerHTML = "medium";
-    } else if (toDos[i].priority === "3") {
-      priorityValue.innerHTML = "low";
-    } else {
-      priorityValue.innerHTML = "";
-    }
+    let checkPriorityValue = {
+      1: "high",
+      2: "medium",
+      3: "low",
+    };
+
+    priorityValue.innerHTML = checkPriorityValue[toDos[i].priority] || "";
     div.appendChild(priorityValue);
 
     let h4 = document.createElement("h4");
@@ -141,6 +150,11 @@ function displayTodos() {
     editTodosButton.classList.add("edit-todos-button");
     editTodosButton.setAttribute("data-id", i);
     editTodosButton.innerHTML = "Edit";
+
+    if (toDos[i].isChecked) {
+      editTodosButton.setAttribute("disabled", "");
+    }
+
     div.appendChild(editTodosButton);
 
     let removeTodosButton = document.createElement("button");
@@ -151,11 +165,14 @@ function displayTodos() {
 
     listContainer.appendChild(div);
 
-    isCheckedTodo.addEventListener("change", (e) => {
+    checkboxTodo.addEventListener("change", (e) => {
       div.classList.toggle("todo-wrapper");
       let id = e.target.getAttribute("data-id");
       let todo = toDos[id];
       todo.isChecked = e.target.checked;
+
+      editTodosButton.disabled = e.target.checked;
+
       saveTodosInLocalStorage();
     });
   }
