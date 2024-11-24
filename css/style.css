@@ -71,6 +71,7 @@ span {
   margin-bottom: 10px;
   resize: none;
 }
+
 #sort-by {
   display: flex;
   justify-self: right;

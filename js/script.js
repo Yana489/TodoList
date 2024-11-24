@@ -9,10 +9,11 @@ let modeIcon = document.getElementById("icon");
 
 document.addEventListener("DOMContentLoaded", getTodosFromLocalStorage);
 addTodosButton.addEventListener("click", addTodos);
-listContainer.addEventListener("click", clickOnButtons);
 sortBySelect.addEventListener("change", sortSelect);
 modeIcon.addEventListener("click", clickOnChangeModeIcon);
 document.addEventListener("keydown", clickOnEnterButton);
+inputTitle.addEventListener("input", AddButtonVisibility);
+inputText.addEventListener("input", AddButtonVisibility);
 changeTheme();
 
 let toDos = [];
@@ -75,43 +76,55 @@ function addTodos() {
     inputTitle.value = "";
     inputText.value = "";
     prioritySelect.value = "Priority";
+    AddButtonVisibility();
   }
 }
 
-function clickOnButtons(e) {
-  if (e.target.closest(".remove-todos-button")) {
-    let id = e.target.getAttribute("data-id");
-    let todo = toDos[id];
-    let todoIndex = toDos.indexOf(todo);
-    toDos.splice(todoIndex, 1);
-    saveTodosInLocalStorage();
-    displayTodos();
+function AddButtonVisibility() {
+  if (inputTitle.value !== "" || inputText.value !== "") {
+    addTodosButton.style.display = "inline";
+  } else {
+    addTodosButton.style.display = "none";
   }
+}
 
-  if (e.target.closest(".edit-todos-button")) {
-    let id = e.target.getAttribute("data-id");
-    let todo = toDos[id];
-    inputTitle.value = todo.title;
-    inputText.value = todo.text;
-    saveEditTodosButton.style.display = "inline";
+function clickOnRemoveButtons(e) {
+  let id = e.target.getAttribute("data-id");
+  let todo = toDos[id];
+  let todoIndex = toDos.indexOf(todo);
+  toDos.splice(todoIndex, 1);
+  saveTodosInLocalStorage();
+  displayTodos();
+}
 
-    saveEditTodosButton.addEventListener("click", saveTodos);
+function clickOnEditButtons(e) {
+  let id = e.target.getAttribute("data-id");
+  let todo = toDos[id];
+  inputTitle.value = todo.title;
+  inputText.value = todo.text;
+  saveEditTodosButton.style.display = "inline";
 
-    function saveTodos() {
-      todo.title = inputTitle.value;
-      todo.text = inputText.value;
-      inputTitle.value = "";
-      inputText.value = "";
-      saveEditTodosButton.style.display = "none";
-      saveTodosInLocalStorage();
-      displayTodos();
-      saveEditTodosButton.removeEventListener("click", saveTodos);
-    }
-  }
+  saveEditTodosButton.addEventListener("click", saveTodos.bind(null, id, todo));
+}
+
+function saveTodos(id, todo) {
+  todo.title = inputTitle.value;
+  todo.text = inputText.value;
+  inputTitle.value = "";
+  inputText.value = "";
+  saveEditTodosButton.style.display = "none";
+  saveTodosInLocalStorage();
+  displayTodos();
+  saveEditTodosButton.removeEventListener(
+    "click",
+    saveTodos.bind(null, id, todo)
+  );
+  AddButtonVisibility();
 }
 
 function displayTodos() {
   listContainer.innerHTML = "";
+  AddButtonVisibility();
 
   for (let i = 0; i < toDos.length; i++) {
     let div = document.createElement("div");
@@ -151,6 +164,8 @@ function displayTodos() {
     editTodosButton.setAttribute("data-id", i);
     editTodosButton.innerHTML = "Edit";
 
+    editTodosButton.addEventListener("click", clickOnEditButtons);
+
     if (toDos[i].isChecked) {
       editTodosButton.setAttribute("disabled", "");
     }
@@ -161,6 +176,8 @@ function displayTodos() {
     removeTodosButton.classList.add("remove-todos-button");
     removeTodosButton.setAttribute("data-id", i);
     removeTodosButton.innerHTML = "Remove";
+
+    removeTodosButton.addEventListener("click", clickOnRemoveButtons);
     div.appendChild(removeTodosButton);
 
     listContainer.appendChild(div);
@@ -175,6 +192,11 @@ function displayTodos() {
 
       saveTodosInLocalStorage();
     });
+  }
+  if (toDos.length > 0) {
+    sortBySelect.style.display = "block";
+  } else {
+    sortBySelect.style.display = "none";
   }
 }
 
