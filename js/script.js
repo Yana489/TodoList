@@ -1,19 +1,19 @@
 const inputTitle = document.getElementById("input-title");
 const inputText = document.getElementById("input-text");
 const listContainer = document.getElementById("list-container");
-const addTodosButton = document.getElementById("add-todos-button");
-const saveEditTodosButton = document.getElementById("save-todos-button");
+const addTodoButton = document.getElementById("add-todo-button");
+let saveEditTodoButton = document.getElementById("save-todo-button");
 const prioritySelect = document.getElementById("priority");
 const sortBySelect = document.getElementById("sort-by");
 let modeIcon = document.getElementById("icon");
 
 document.addEventListener("DOMContentLoaded", getTodosFromLocalStorage);
-addTodosButton.addEventListener("click", addTodos);
+addTodoButton.addEventListener("click", checkOfEmptyInput);
 sortBySelect.addEventListener("change", sortSelect);
 modeIcon.addEventListener("click", clickOnChangeModeIcon);
 document.addEventListener("keydown", clickOnEnterButton);
-inputTitle.addEventListener("input", AddButtonVisibility);
-inputText.addEventListener("input", AddButtonVisibility);
+inputTitle.addEventListener("input", changeButtonVisibility);
+inputText.addEventListener("input", changeButtonVisibility);
 changeTheme();
 
 let toDos = [];
@@ -53,42 +53,44 @@ function clickOnChangeModeIcon() {
 function clickOnEnterButton(e) {
   if (e.key === "Enter") {
     e.preventDefault();
-    if (saveEditTodosButton.style.display === "inline") {
-      saveEditTodosButton.click();
+    if (saveEditTodoButton.style.display === "inline") {
+      saveEditTodoButton.click();
     } else {
-      addTodosButton.click();
+      addTodoButton.click();
     }
   }
 }
 
-function addTodos() {
+function checkOfEmptyInput() {
   if (inputTitle.value === "" && inputText.value === "") {
     return;
   } else {
-    let toDo = {
-      title: inputTitle.value,
-      text: inputText.value,
-      priority: prioritySelect.value,
-      isChecked: false,
-    };
-    toDos.push(toDo);
-    displayTodos();
-    inputTitle.value = "";
-    inputText.value = "";
-    prioritySelect.value = "Priority";
-    AddButtonVisibility();
+    addTodo();
   }
 }
 
-function AddButtonVisibility() {
-  if (inputTitle.value !== "" || inputText.value !== "") {
-    addTodosButton.style.display = "inline";
-  } else {
-    addTodosButton.style.display = "none";
-  }
+function addTodo() {
+  let toDo = {
+    title: inputTitle.value,
+    text: inputText.value,
+    priority: prioritySelect.value,
+    isChecked: false,
+  };
+  toDos.push(toDo);
+  displayTodos();
+  inputTitle.value = "";
+  inputText.value = "";
+  prioritySelect.value = "Priority";
+  changeButtonVisibility();
 }
 
-function clickOnRemoveButtons(e) {
+function changeButtonVisibility() {
+  inputTitle.value !== "" || inputText.value !== ""
+    ? (addTodoButton.style.display = "inline")
+    : (addTodoButton.style.display = "none");
+}
+
+function clickOnRemoveButton(e) {
   let id = e.target.getAttribute("data-id");
   let todo = toDos[id];
   let todoIndex = toDos.indexOf(todo);
@@ -97,50 +99,52 @@ function clickOnRemoveButtons(e) {
   displayTodos();
 }
 
-function clickOnEditButtons(e) {
+function clickOnEditButton(e) {
   let id = e.target.getAttribute("data-id");
   let todo = toDos[id];
   inputTitle.value = todo.title;
   inputText.value = todo.text;
-  saveEditTodosButton.style.display = "inline";
+  saveEditTodoButton.style.display = "inline";
 
-  saveEditTodosButton.addEventListener("click", saveTodos.bind(null, id, todo));
+  saveEditTodoButton.replaceWith(saveEditTodoButton.cloneNode(true));
+  saveEditTodoButton = document.getElementById("save-todo-button");
+
+  saveEditTodoButton.addEventListener("click", () => saveTodo(todo));
 }
 
-function saveTodos(id, todo) {
+function saveTodo(todo) {
   todo.title = inputTitle.value;
   todo.text = inputText.value;
   inputTitle.value = "";
   inputText.value = "";
-  saveEditTodosButton.style.display = "none";
+  saveEditTodoButton.style.display = "none";
   saveTodosInLocalStorage();
   displayTodos();
-  saveEditTodosButton.removeEventListener(
-    "click",
-    saveTodos.bind(null, id, todo)
-  );
-  AddButtonVisibility();
+  changeButtonVisibility();
 }
 
 function displayTodos() {
   listContainer.innerHTML = "";
-  AddButtonVisibility();
+  changeButtonVisibility();
 
   for (let i = 0; i < toDos.length; i++) {
-    let div = document.createElement("div");
+    let div = createElement("div", "todo-items");
 
-    let checkboxTodo = document.createElement("input");
-    checkboxTodo.setAttribute("type", "checkbox");
-    checkboxTodo.setAttribute("data-id", i);
+    let checkboxTodo = createElement("input", "checkbox-todo", null, {
+      type: "checkbox",
+      "data-id": i,
+    });
 
     if (toDos[i].isChecked) {
       checkboxTodo.setAttribute("checked", "checked");
       div.classList.add("todo-wrapper");
     }
 
-    div.appendChild(checkboxTodo);
-
-    let priorityValue = document.createElement("span");
+    let priorityValue = createElement(
+      "span",
+      "priority-value",
+      toDos[i].priority
+    );
     let checkPriorityValue = {
       1: "high",
       2: "medium",
@@ -148,38 +152,42 @@ function displayTodos() {
     };
 
     priorityValue.innerHTML = checkPriorityValue[toDos[i].priority] || "";
-    div.appendChild(priorityValue);
 
-    let h4 = document.createElement("h4");
-    h4.innerHTML = toDos[i].title;
-    div.appendChild(h4);
+    let h4 = createElement("h4", "todo-title", toDos[i].title);
 
-    let p = document.createElement("p");
-    p.innerHTML = toDos[i].text;
-    div.appendChild(p);
+    let p = createElement("p", "todo-text", toDos[i].text);
+
     saveTodosInLocalStorage();
 
-    let editTodosButton = document.createElement("button");
-    editTodosButton.classList.add("edit-todos-button");
-    editTodosButton.setAttribute("data-id", i);
-    editTodosButton.innerHTML = "Edit";
+    let editTodoButton = createElement("button", "edit-todo-button", "Edit", {
+      "data-id": i,
+    });
 
-    editTodosButton.addEventListener("click", clickOnEditButtons);
+    editTodoButton.addEventListener("click", clickOnEditButton);
 
     if (toDos[i].isChecked) {
-      editTodosButton.setAttribute("disabled", "");
+      editTodoButton.setAttribute("disabled", "");
     }
 
-    div.appendChild(editTodosButton);
+    let removeTodoButton = createElement(
+      "button",
+      "remove-todo-button",
+      "Remove",
+      {
+        "data-id": i,
+      }
+    );
 
-    let removeTodosButton = document.createElement("button");
-    removeTodosButton.classList.add("remove-todos-button");
-    removeTodosButton.setAttribute("data-id", i);
-    removeTodosButton.innerHTML = "Remove";
+    removeTodoButton.addEventListener("click", clickOnRemoveButton);
 
-    removeTodosButton.addEventListener("click", clickOnRemoveButtons);
-    div.appendChild(removeTodosButton);
-
+    div.append(
+      checkboxTodo,
+      priorityValue,
+      h4,
+      p,
+      editTodoButton,
+      removeTodoButton
+    );
     listContainer.appendChild(div);
 
     checkboxTodo.addEventListener("change", (e) => {
@@ -188,16 +196,25 @@ function displayTodos() {
       let todo = toDos[id];
       todo.isChecked = e.target.checked;
 
-      editTodosButton.disabled = e.target.checked;
+      editTodoButton.disabled = e.target.checked;
 
       saveTodosInLocalStorage();
     });
   }
-  if (toDos.length > 0) {
-    sortBySelect.style.display = "block";
-  } else {
-    sortBySelect.style.display = "none";
+  toDos.length > 0
+    ? (sortBySelect.style.display = "block")
+    : (sortBySelect.style.display = "none");
+}
+function createElement(tag, className, content, attribute) {
+  let element = document.createElement(tag);
+  if (className) element.classList.add(className);
+  if (content) element.innerHTML = content;
+  if (attribute) {
+    for (let key in attribute) {
+      element.setAttribute(key, attribute[key]);
+    }
   }
+  return element;
 }
 
 function sortSelect() {
