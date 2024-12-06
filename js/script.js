@@ -43,11 +43,10 @@ function clickOnChangeModeIcon() {
   if (document.body.classList.contains("dark-theme")) {
     theme = "dark";
     modeIcon.src = "images/icons/sun.png";
-    localStorage.setItem("theme", theme);
   } else {
     modeIcon.src = "images/icons/moon.png";
-    localStorage.setItem("theme", theme);
   }
+  localStorage.setItem("theme", theme);
 }
 
 function clickOnEnterButton(e) {
@@ -62,9 +61,7 @@ function clickOnEnterButton(e) {
 }
 
 function checkOfEmptyInput() {
-  if (inputTitle.value === "" && inputText.value === "") {
-    return;
-  } else {
+  if (inputTitle.value !== "" && inputText.value !== "") {
     addTodo();
   }
 }
