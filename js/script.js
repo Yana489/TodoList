@@ -10,11 +10,11 @@ let modeIcon = document.getElementById("icon");
 document.addEventListener("DOMContentLoaded", getTodosFromLocalStorage);
 addTodoButton.addEventListener("click", checkOfEmptyInput);
 sortBySelect.addEventListener("change", sortSelect);
-modeIcon.addEventListener("click", clickOnChangeModeIcon);
+modeIcon.addEventListener("click", toggleTheme);
 document.addEventListener("keydown", clickOnEnterButton);
 inputTitle.addEventListener("input", changeButtonVisibility);
 inputText.addEventListener("input", changeButtonVisibility);
-changeTheme();
+initializeTheme();
 
 let toDos = [];
 
@@ -28,25 +28,24 @@ function saveTodosInLocalStorage() {
   localStorage.setItem("toDos", JSON.stringify(toDos));
 }
 
-function changeTheme() {
-  let currentTheme = localStorage.getItem("theme");
-
-  if (currentTheme === "dark") {
-    document.body.classList.add("dark-theme");
-    modeIcon.src = "images/icons/sun.png";
-  }
+function applyTheme(theme) {
+  const isDark = theme === "dark";
+  document.body.classList.toggle("dark-theme", isDark);
+  modeIcon.src = isDark ? "images/icons/sun.png" : "images/icons/moon.png";
 }
 
-function clickOnChangeModeIcon() {
-  document.body.classList.toggle("dark-theme");
-  let theme = "light";
-  if (document.body.classList.contains("dark-theme")) {
-    theme = "dark";
-    modeIcon.src = "images/icons/sun.png";
-  } else {
-    modeIcon.src = "images/icons/moon.png";
-  }
-  localStorage.setItem("theme", theme);
+function initializeTheme() {
+  const storedTheme = localStorage.getItem("theme") || "light";
+  applyTheme(storedTheme);
+}
+
+function toggleTheme() {
+  const currentTheme = document.body.classList.contains("dark-theme")
+    ? "dark"
+    : "light";
+  const newTheme = currentTheme === "dark" ? "light" : "dark";
+  applyTheme(newTheme);
+  localStorage.setItem("theme", newTheme);
 }
 
 function clickOnEnterButton(e) {
@@ -61,7 +60,7 @@ function clickOnEnterButton(e) {
 }
 
 function checkOfEmptyInput() {
-  if (inputTitle.value !== "" && inputText.value !== "") {
+  if (inputTitle.value !== "" || inputText.value !== "") {
     addTodo();
   }
 }
@@ -75,10 +74,14 @@ function addTodo() {
   };
   toDos.push(toDo);
   displayTodos();
-  inputTitle.value = "";
-  inputText.value = "";
+  changeInputToEmptyValue();
   prioritySelect.value = "Priority";
   changeButtonVisibility();
+}
+
+function changeInputToEmptyValue() {
+  inputTitle.value = "";
+  inputText.value = "";
 }
 
 function changeButtonVisibility() {
@@ -112,9 +115,8 @@ function clickOnEditButton(e) {
 function saveTodo(todo) {
   todo.title = inputTitle.value;
   todo.text = inputText.value;
-  inputTitle.value = "";
-  inputText.value = "";
   saveEditTodoButton.style.display = "none";
+  changeInputToEmptyValue();
   saveTodosInLocalStorage();
   displayTodos();
   changeButtonVisibility();
@@ -131,11 +133,6 @@ function displayTodos() {
       type: "checkbox",
       "data-id": i,
     });
-
-    if (toDos[i].isChecked) {
-      checkboxTodo.setAttribute("checked", "checked");
-      div.classList.add("todo-wrapper");
-    }
 
     let priorityValue = createElement(
       "span",
@@ -163,6 +160,8 @@ function displayTodos() {
     editTodoButton.addEventListener("click", clickOnEditButton);
 
     if (toDos[i].isChecked) {
+      checkboxTodo.setAttribute("checked", "checked");
+      div.classList.add("todo-wrapper");
       editTodoButton.setAttribute("disabled", "");
     }
 
@@ -198,10 +197,12 @@ function displayTodos() {
       saveTodosInLocalStorage();
     });
   }
+
   toDos.length > 0
     ? (sortBySelect.style.display = "block")
     : (sortBySelect.style.display = "none");
 }
+
 function createElement(tag, className, content, attribute) {
   let element = document.createElement(tag);
   if (className) element.classList.add(className);

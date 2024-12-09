@@ -14,7 +14,7 @@ body {
   --tertiary-color: rgb(250, 248, 248);
 }
 
-.todos__wrapper {
+.todos-wrapper {
   width: 80%;
   max-width: 700px;
   margin: 50px auto;
@@ -69,7 +69,7 @@ body {
   width: 90px;
 }
 
-.todo__input {
+.todo-input {
   display: flex;
   flex-direction: column;
   margin-bottom: 20px;
